@@ -51,10 +51,10 @@ wwwtest.example.com
 ## Usage
 
 ```
-$ ./dehydrated -c -t dns-01 -k 'hooks/dns-01-fortiadc/hook.sh'
+$ ./dehydrated -c -t dns-01 -k 'hooks/cert-01-fortiweb/hook.sh'
 ```
 
-The ```-t dns-01``` part can be skipped, if you have set this challenge type in your config already. Same goes for the ```-k 'hooks/dns-01-fortiadc/hook.sh'``` part, when set in the config as well.
+The ```-t dns-01``` part can be skipped, if you have set this challenge type in your config already. Same goes for the ```-k 'hooks/cert-01-fortiweb/hook.sh'``` part, when set in the config as well.
 
 ## More info
 
