@@ -1,8 +1,8 @@
-# FortiWeb® hook for `dehydrated`
+# FortiWEB® hook for `dehydrated`
 
 This is a hook for the [Let's Encrypt](https://letsencrypt.org/) ACME client [dehydrated](https://github.com/lukas2511/dehydrated) (previously known as `letsencrypt.sh`) that allows you to use [Fortinet® FortiWeb®](https://www.fortinet.com/products/web-application-firewall/fortiweb.html) to host your certificates.
 
-Tested on FortiWeb® 5.8.0
+Tested on FortiWEB® 5.8.2
 
 ## Requirements
 
@@ -39,7 +39,7 @@ Also you need to change the following settings in your dehydrated config (origin
 CHALLENGETYPE="dns-01"
 ``` 
 
-If you use FortiADC® as a HTTPS load balancers®, you need to align your setup of target proxies with how you create the certificates. All domains served by a target proxy have to be in the same certificate. If that is more than one, you cannot use the -d command line option of dehydrated. Instead you have to create a domains.txt file. The following example assumes you have two target proxies; one serving requests for example.com and www.example.com. And the second one serving wwwtest.example.com:
+If you use FortiWEB® as a HTTPS load balancers®, you need to align your setup of target proxies with how you create the certificates. All domains served by a target proxy have to be in the same certificate. If that is more than one, you cannot use the -d command line option of dehydrated. Instead you have to create a domains.txt file. The following example assumes you have two target proxies; one serving requests for example.com and www.example.com. And the second one serving wwwtest.example.com:
 
 domains.txt
 ``` 
@@ -63,4 +63,4 @@ More hooks: https://github.com/lukas2511/dehydrated/wiki/Examples-for-DNS-01-hoo
 Dehydrated: https://github.com/lukas2511/dehydrated
 
 
-Copyright © 2017 Fortinet, Inc. All rights reserved. Fortinet®, FortiADC®, FortiWeb® and certain other marks are registered trademarks of Fortinet, Inc., and other Fortinet names herein may also be registered and/or common law trademarks of Fortinet. 
+Copyright © 2017 Fortinet, Inc. All rights reserved. Fortinet®, FortiADC®, FortiWEB® and certain other marks are registered trademarks of Fortinet, Inc., and other Fortinet names herein may also be registered and/or common law trademarks of Fortinet. 
