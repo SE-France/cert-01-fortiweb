@@ -1,6 +1,6 @@
 # FortiWeb® hook for `dehydrated`
 
-This is a hook for the [Let's Encrypt](https://letsencrypt.org/) ACME client [dehydrated](https://github.com/lukas2511/dehydrated) (previously known as `letsencrypt.sh`) that allows you to use [Fortinet® FortiWeb®](https://www.fortinet.com/products/application-delivery-controller/fortiadc.html) to host your certificates.
+This is a hook for the [Let's Encrypt](https://letsencrypt.org/) ACME client [dehydrated](https://github.com/lukas2511/dehydrated) (previously known as `letsencrypt.sh`) that allows you to use [Fortinet® FortiWeb®](https://www.fortinet.com/products/web-application-firewall/fortiweb.html) to host your certificates.
 
 Tested on FortiWeb® 5.8.0
 
