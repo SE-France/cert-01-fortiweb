@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+FORTIWEB="" #IP or FQDN of the FortiWEB admin page
+USERNAME="" # username of an admin account
+PASSWORD="" # password of an admin account
