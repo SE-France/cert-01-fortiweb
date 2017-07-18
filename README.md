@@ -18,7 +18,7 @@ $ cd ~
 $ git clone https://github.com/lukas2511/dehydrated
 $ cd dehydrated
 $ mkdir hooks
-$ git clone https://github.com/lenoxys/cert-01-fortiweb hooks/cert-01-fortiweb
+$ git clone https://github.com/SE-France/cert-01-fortiweb hooks/cert-01-fortiweb
 ```
 
 ## Configuration

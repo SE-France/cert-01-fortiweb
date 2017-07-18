@@ -5,40 +5,54 @@
 
 # DO NOT CHANGE PARAMETERS BELOW
 
-AUTH=$(printf $USERNAME':'$PASSWORD | base64)
-
-CURL="/usr/bin/curl -f -m 5 -H 'Accept: application/json' -H 'Authorization: $AUTH'"
-# -s
-
-CURL_GET="$CURL -k -X GET https://$FORTIWEB:90/api/v1.0/System/Status/HostName"
-CURL_POST="$CURL -k -X POST https://$FORTIWEB:90/api/v1.0/System/Status/HostName"
-
-echo $CURL_GET
-
-exit
-
 IS_ADOM=0
 LOGGED=0
 URL_VDOM=''
 
+function send_curl() 
+{
+    local  __method=$1
+    local  __url=$2
+    local  __adom=$3
+    
+    local AUTH=$(printf $USERNAME':'$PASSWORD | base64)
+    
+    test "$__adom" && AUTH=$(printf $USERNAME':'$PASSWORD':'$__adom | base64)
+    
+    local CURL="/usr/bin/curl -s -f -m 5 -H 'Accept: application/json' -H 'Authorization: $AUTH'"
+    CMD="$CURL -k -X $__method https://$FORTIWEB:90/api/v1.0/$__url"
+}
+
 function login() {
     echo '   + login'
-    local DATA='{"username":"'$USERNAME'","password":"'$PASSWORD'"}'
-    local CMD=$CURL_LOGIN'/user/login -d '$DATA' || echo -1'
-    if [ -1 == $(eval $CMD) ]; then 
+    send_curl 'GET' 'System/Status/Status'
+    local CMD=$CMD' || echo -1'
+    local EVAL=$(eval $CMD)
+    
+    if [ -1 == "$EVAL" ]; then 
         echo '     + connection error !'
-        return
+        return -1
     fi
+    
     LOGGED=1
+    
+    if [ $(echo $EVAL | jq -r '.administrativeDomain') == "Enabled" ]; then 
+        echo '     + ADOM detected !'
+        IS_ADOM=1
+        #get_adom_list
+        return 0
+    fi
+    
+    return 0
 }
 
 
-function get_vdom_list() {
-    echo '  + get vdom list'
-    local CMD=$CURL_GET'/vdom || echo -1'
-    local EVAL=$($CMD)
+function get_adom_list() {
+    echo '  + get ADOM list'
+    local CMD=$CURL_GET'/System/Status/Status || echo -1'
+    local EVAL=$(eval $CMD)
     
-    if [ -1 == $EVAL ]; then 
+    if [ -1 == "$EVAL" ]; then 
         echo '     + connection error !'
         return
     fi
@@ -61,6 +75,28 @@ function global_dns_server_zone() {
     local CMD=$CURL_GET'/global_dns_server_zone?'$URL_VDOM
     ZONES=$(eval $CMD | jq -r '.payload[] | { mkey: .mkey, domain_name: .domain_name | select(. != null) } | @base64')
 }
+
+
+function get_certificate_list() {
+    echo '     + extract certificate list'
+    
+    send_curl 'GET' 'System/Certificates/Local' 'root'
+    local CMD=$CMD' || echo -1'
+    local EVAL=$(eval $CMD)
+    
+    if [ -1 == "$EVAL" ]; then 
+        echo '     + connection error !'
+        return -1
+    fi
+    
+    echo $EVAL | jq
+    
+    #ZONES=$(eval $CMD | jq -r '.payload[] | { mkey: .mkey, domain_name: .domain_name | select(. != null) } | @base64')
+    
+    return 0
+}
+
+
 
 
 function search_global_dns_server_zone() {
@@ -112,7 +148,7 @@ function get_global_dns_server_zone_child_txt_record_idx() {
     done
 }
 
-function add_global_dns_server_zone_child_txt_record() {
+function add_certificate() {
     
     get_global_dns_server_zone_child_txt_record_idx $MKEY $CLEAN_DOMAIN
     test -n "${IDX}" && echo '     + txt entrie already exist : pass !' && return 1
@@ -203,7 +239,11 @@ function deploy_cert() {
     
     echo ' + fortiweb hook executing: deploy_cert'
     
-    echo ' + nothing to do'
+    login
+    test $LOGGED == 0 && return # Stop if not logged
+    get_certificate_list
+    
+    
 }
 
 function unchanged_cert() {
